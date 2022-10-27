@@ -1,0 +1,17 @@
+First, create a passwrod for the root account.
+
+To secure the database server, type 'Y' for the remaining prompts to achieve the following:
+
+1. Remove anonymous users
+2. Disallow remote login
+3. Remove test database
+4. Reload privilege tables
+
+run the following commands:
+
+1  GRANT ALL ON *.* TO 'admin'@'localhost' IDENTIFIED BY 'password' WITH GRANT OPTION;
+2  FLUSH PRIVILEGES;
+3  exit
+
+
+close this window

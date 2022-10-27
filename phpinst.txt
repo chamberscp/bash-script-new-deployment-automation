@@ -1,0 +1,46 @@
+Here are the options you should choose when prompted in order to configure your installation correctly:
+
+For the server selection, choose apache2
+Warning: When the prompt appears, “apache2” is highlighted, but not selected. If you do not hit SPACE to select Apache, the installer will not move the necessary files during installation. Hit SPACE, TAB, and then ENTER to select Apache.
+
+Select Yes when asked whether to use dbconfig-common to set up the database
+You will then be asked to choose and confirm a MySQL application password for phpMyAdmin
+Note: Assuming you installed MySQL by following Step 2 of the prerequisite LAMP stack tutorial, you may have decided to enable the Validate Password plugin. As of this writing, enabling this component will trigger an error when you attempt to set a password for the phpmyadmin user:
+
+phpMyAdmin password validation error
+
+To resolve this, select the abort option to stop the installation process. Then, open up your MySQL prompt:
+
+1. sudo mysql
+
+Or, if you enabled password authentication for the root MySQL user, run this command and then enter your password when prompted.
+
+1. mysql -u root -p
+
+From the prompt, run the following command to disable the Validate Password component. Note that this won’t actually uninstall it, but just stop the component from being loaded on your MySQL server:
+
+1.UNINSTALL COMPONENT "file://component_validate_password";
+2. mysql> exit
+
+Then try installing the phpmyadmin package again and it will work as expected:
+
+1. sudo apt install phpmyadmin
+
+Once phpMyAdmin is installed, you can open the MySQL prompt once again with sudo mysql or mysql -u root -p and then run the following command to re-enable the Validate Password component:
+
+1. INSTALL COMPONENT "file://component_validate_password";
+
+The installation process adds the phpMyAdmin Apache configuration file into the /etc/apache2/conf-enabled/ directory, where it is read automatically. To finish configuring Apache and PHP to work with phpMyAdmin, the only remaining task in this section of the tutorial is to is explicitly enable the mbstring PHP extension, which you can do by typing:
+
+1. sudo phpenmod mbstring
+2. sudo systemctl restart apache2
+
+                                                            
+                                               Step 2 — Adjusting User Authentication and Privileges
+When you installed phpMyAdmin onto your server, it automatically created a database user called phpmyadmin which performs certain underlying processes for the program. Rather than logging in as this user with the administrative password you set during installation, it’s recommended that you log in as either your root MySQL user or as a user dedicated to managing databases through the phpMyAdmin interface.
+
+Configuring Password Access for the MySQL Root Account
+In Ubuntu systems running MySQL 5.7 (and later versions), the root MySQL user is set to authenticate using the auth_socket plugin by default rather than with a password. This allows for some greater security and usability in many cases, but it can also complicate things when you need to allow an external program — like phpMyAdmin — to access the user.
+
+In order to log in to phpMyAdmin as your root MySQL user, you will need to switch its authentication method from auth_socket to one that makes use of a password, if you haven’t already done so. To do this, open up the MySQL prompt from your terminal:
+ 

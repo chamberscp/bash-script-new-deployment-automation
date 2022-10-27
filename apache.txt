@@ -1,0 +1,6 @@
+Upon reaching this point, open a web browser from another VM or terminal on another machine and type:
+
+http://server-ip
+
+where server ip is the ip address of the server apache is on.  You can locate the ip address with "ip a" from the command line on this machine.
+close this text doc after reaching the Apache2 Default page "It works" on the other machine.
